@@ -8,7 +8,7 @@ public class SinglyLinkedList {
 		Node next;
 		
 		//Instantiates node with the given data and pointer to next node
-		public Node(Object data, Node next) {
+		private Node(Object data, Node next) {
 			this.data = data;
 			this.next = next;
 		}
