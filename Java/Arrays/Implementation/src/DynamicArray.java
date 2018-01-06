@@ -63,7 +63,7 @@ public class DynamicArray {
     //Trailing indices are shifted right
     public void insert(int index, Object item) {
         if (index < 0 || (index >= this.size && index != 0))
-        throw new ArrayIndexOutOfBoundsException();
+            throw new ArrayIndexOutOfBoundsException();
         if (this.size == this.capacity)
             resize(2*this.capacity);
         for (int i=this.size; i>index; i--)
