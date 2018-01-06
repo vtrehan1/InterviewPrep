@@ -92,7 +92,7 @@ public class SinglyLinkedList {
 		}
 		else {
 			Node nodeIterator = head;
-			for (int i=0; i<size-1; i++)
+			while (nodeIterator.next.next != null)
 				nodeIterator = nodeIterator.next;
 			tail = nodeIterator;
 		}
