@@ -9,10 +9,10 @@ public class BinarySearchIterativeAscendingInteger {
 		
 		int low = 0;
 		int high = arr.length-1;
-		int midpoint = -1;
+		int midpoint;
 
 		while(true) {
-			if (high == low)
+			if (low >= high)
 				break;
 			midpoint = (low+high)/2;
 			if (arr[midpoint] == value)

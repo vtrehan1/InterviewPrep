@@ -8,14 +8,15 @@ public class BinarySearchRecursiveDescendingInteger {
 		
 		int low = arr.length-1;
 		int high = 0;
-		int midpoint = -1;
+		int midpoint = 0;
 		
 		return findElement(arr, value, low, high, midpoint);
 	}
 
 	private static int findElement(int[] arr, int value, int low, int high, int midpoint) {
-		if (high == low)
+		if (high >= low)
 			return -1;
+		midpoint = (low+high)/2;
 		if (arr[midpoint] == value)
 			return midpoint;
 		if (arr[midpoint] > value)

@@ -8,20 +8,20 @@ public class BinarySearchRecursiveAscendingInteger {
 		
 		int low = 0;
 		int high = arr.length -1;
-		int midpoint = -1;
+		int midpoint = 0;
 		
 		return findElement(arr, value, low, high, midpoint);
 	}
 
 	private static int findElement(int[] arr, int value, int low, int high, int midpoint) {
-		if (high == low)
+		if (low >= high)
 			return -1;
+		midpoint = (low+high)/2;
 		if (arr[midpoint] == value)
 			return midpoint;
 		if (arr[midpoint] > value)
-			low = midpoint + 1;
+			return findElement(arr,value,midpoint+1,high,midpoint);
 		else 
-			high = midpoint -1;
-		return findElement(arr,value,low,high,midpoint);
+			return findElement(arr,value,low,midpoint-1,midpoint);
 	}
 }
