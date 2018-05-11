@@ -725,6 +725,16 @@
 ```
 
 ```java
+  // Assume Faculty extends Person
+
+  ArrayList<Faculty> facultyList = new ArrayList<>();
+  ArrayList<? extends Person> personList = facultyList;
+
+  // Allowed since null can be added to any ArrayList regardless of generic type
+  personList.add(null);
+```
+
+```java
   TropicalFruit[] tropicalFruitArray = new TropicalFruit[10];
 
   // Allowed but causes problems
