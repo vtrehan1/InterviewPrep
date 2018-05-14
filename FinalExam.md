@@ -666,6 +666,10 @@
 
 ### Wildcards
 
+- ArrayList<?>: any class is valid as the generic type
+- ArrayList<? extends [insert class]>: class or any of its subclasses are valid
+- ArrayList<? extends [insert interface]>: interface or classes implementing interface are valid
+
 ```java
   public void printComputers(Collection<Computer> cl) {
     for (Computer c : cl) {
@@ -740,8 +744,10 @@
   // Allowed but causes problems
   FruitArray[] fruitArray = tropicalFruitArray;
 
+  tropicalFruitArray[0] = new TropicalFruit(); // allowed
   tropicalFruitArray[0] = new Fruit(); // compilation error
-  fruitArray[0] = new TropicalFruit(); // throws exception
+  fruitArray[0] = new TropicalFruit(); // allowed
+  fruitArray[0] = new Fruit(); // throws exception
 ```
 
 ## Comparator T
@@ -826,3 +832,357 @@
   - TreeSet: data inputted comes out in natural ordering
   - HashSet: data comes out in arbitrary ordering
   - LinkedHashSet: data comes out in order of inputting
+
+## Searching
+
+### Linear Search
+
+- O(n)
+- Search element by element until found or you reach the end of the list
+
+### Binary Search
+
+- O(log(n))
+- Only works for sorted data!
+- Start with the middle element
+  - If target = middle, you're done
+  - If target > middle repeat on the right half (assuming data sorted ascendingly)
+  - If target < middle repeat on the left half (assuming data sorted ascendingly)
+
+## LinkedLists
+
+### Comparison w/ Arrays
+
+- Arrays
+  - Stored contiguously in memory
+  - O(1) access due to indexing
+  - O(n) insertion at front/middle
+- LinkedLists
+  - Stored non-contiguously in memory
+  - O(n) access since traversal required
+  - O(1) insertion/deletion (after traversing to the node)
+
+## Trees
+
+### Vocabulary
+
+- Root node: node w/o parent node
+- Leaf node: node w/o child nodes
+- Interior node: node w/ >= 1 child nodes
+- Sibling nodes: nodes sharing the same parent
+- Descendant nodes: all child nodes and their children
+- Height: number of levels separating furthest node from root
+  - Root has height of 1
+  - Empty tree has height of 0
+  - Tree has 2^height - 1 ttoal nodes
+
+### Binary Search Tree
+
+#### Invariant
+
+- Each node has 0-2 children (no duplicate keys)
+- Value < node falls in left subtree
+- Value > node falls in right subtree
+
+#### Traversals
+
+- Preorder: VLR (visit node, recursively visit left, recursively visit right)
+  - Any BST can be reconstructed from its preorder traversal
+- Inorder: LVR (recursively visit left, visit node, recursively visit right)
+  - Inorder traversal outputs data in order
+- Postorder: LRV (recursively visit left, recursively visit right, visit node)
+
+### Node Deletion
+
+- Three cases
+  - Node to delete has 0 children: make its parent point to null
+  - Node to delete has 1 child: make its parent point to child of node to delete
+  - Node to delete has 2 children: make its parent point to:
+    - Leftmost child in right subtree of node to delete
+    - Rightmost child in left subtree of node to delete
+
+#### Complexities
+
+- O(log(n)) searching (can deterioriate to O(n) if BST --> LinkedList)
+- O(n) for any traversal
+
+#### Types
+
+- Perfect BST: every node (except leaf nodes) has exactly 2 children
+- Complete BST: perfect until last level, last level filled in left -> right order
+
+## Heaps
+
+### Invariant
+
+- Complete binary trees (NOT BST's)
+- Minheap: children are all greater than node (smallest node is tree root)
+- Maxheap: children are all less than node (largest node is tree root)
+
+### Operations
+
+#### insert()
+
+- Adds node to next available spot in complete binary tree
+- Swaps child node with parent node while child node < parent node ("bubbling up")
+
+#### getSmallest()
+
+- Removes root node
+- Places node furthest right in level h of tree in root's position
+- Swaps parent node with child node while parent node > child node ("bubbling down")
+
+### Implementation
+
+- Use an array
+  - getParent(i) = floor((i-1)/2)
+  - getLeftChild(i) = 2i + 1
+  - getRightChild(i) = 2i + 2
+
+### Applications
+
+#### Heapsort
+
+- Add all available values to a minheap using insert()
+- Remove all values until heap is empty using getSmallest()
+- O(nlog(n))
+
+#### Priority Queue
+
+- Enqueue: use insert() O(log(n))
+- Dequeue: use getSmallest() O(log(n))
+
+### Comparison w/ BST
+
+- Heap is always balanced bounding insertion/deletion with O(log(n))
+- BST can degenerate into a LinkedList which gives O(n) insertion/deletion
+
+## Graphs
+
+### Vocabulary
+
+- Adjacent/neighbor/successors: nodes having an edge from current node to that node
+- Edge: connection between two nodes
+- Undirected graph: all edges are two-way
+- Directed graph: all edges are one-way
+- Connected graph: each node has an edge to every other node
+- Unconnected graph: not all nodes have an edge to every other node
+- Weighted graph: edges have a cost associated with them
+- Path: connection between nodes via edges
+- Cycle: path starting and ending at same node
+- Simple path: path that doesn't have any cycles in it
+- Acyclic graph: graph that doesn't have any cycles in it
+
+### Traversals
+
+#### Breadth-First Traversal
+
+- Visits all nodes at distance k first before visiting nodes at distance k + 1
+- Implemented with queue
+- Algorithm
+  - Enqueue start node
+  - Dequeue
+  - If dequeued not in the set add it
+  - For each neighbor of the added element, enqueue if it's not in the set
+    - Enqueue in alphabetical order
+  - Continue (2-4) until queue is empty
+
+#### Depth-First Traversal
+
+- Visits all nodes along a path before backtracking to most recent decision point
+- Implemented with a stack
+- Algorithm
+  - Push start node onto stack
+  - Pop
+  - If popped not in set, add it
+  - For each neighbor of popped, push it onto stack if it's not in the set
+    - Push in alphabetical order
+  - Continue (2-4) until the stack is empty
+
+### Dijkstra's Algorithm
+
+- Initialize start node's cost to 0
+- Initialize remaining costs to infinity, remaining predecessors to none
+- Find the node K that's not in the set S with the lowest cost C[K]
+- Add the node K to the set S
+- For each neighbor J of the node not in the set
+  - Calculate the cost of reaching node J
+    - Cost(J) = Cost(K) + Cost(K,J)
+    - If Cost(J) < C[J], make replace C[J] and make predecessor K
+- Repeat (3-5) until the set contains all of the nodes in the graph
+
+## Sorting
+
+### Vocabulary
+
+- Stable: relative order of equal data is preserved
+- In-place: uses only constant additional space
+- Internal: all data being sorted fits in main memory
+- External: all data being sorted doesn't fit in main memory
+- Adaptive: algorithm runs faster the more the data is initially sorted
+
+### Bubble Sort
+
+- Iteratively sweep through, swapping left with right if left > right
+- Average/worst case: O(n^2)
+- Best case: O(n) (with boolean flag)
+- In place and stable
+
+### Selection Sort
+
+- Sweep through array, find min value, make single swap at end
+- Average/worst case: O(n^2)
+- In place and stable
+
+### Insertion Sort
+
+- Pick value, move all values to left over until you've created an open slot, drop value in
+- Average/worst case: O(n^2)
+- In place and stable
+
+### Quick Sort
+
+- Hard split, easy join
+- Pick a pivot, put all values less than pivot to left, all values greater than pivot to right
+- Recursively do the quickSort on left and right until you have trivial sorting problem (one element)
+- Average case: O(nlog(n))
+- Worst case: O(n^2)
+- In place and unstable
+
+### Merge Sort
+
+- Easy split, hard join
+- Partition list into two lists, recursively sort two lists, join two lists
+  - To join, keep finger on two lists
+  - Move down each as placing in order
+- Average/worst case: O(nlog(n))
+- Not in place and stable
+
+## Threading
+
+### Initialization
+
+- Extended the Thread class (not preferred)
+- Implementing the Runnable interface
+
+```java
+  public class MessageTask extends Thread {
+
+    @Override
+    public void run() {
+      System.out.println("running");
+    }
+
+  }
+
+  Thread thread = new MessageTask();
+
+  // MUST call start() instead of run()
+  // run() executes code serially
+  thread.start();
+```
+
+```java
+  public class MessageTask implements Runnable {
+
+    @Override
+    public void run() {
+      System.out.println("running");
+    }
+
+    Thread thread = new Thread(new MessageTask());
+
+    thread.start();
+  }
+```
+
+- `Runnable` is a functional interface so lambda expression can be used as well
+
+```java
+  Thread thread = new Thread(() -> {
+    System.out.println("running");
+  });
+
+  thread.start();
+```
+
+### join()
+
+- `join()` guarantees code afterward will run only after threads are finished
+
+```java
+  Thread thread1 = new Thread(() -> {
+      for (int i = 0; i < 1000; i++) {
+        System.out.println("thread one running");
+      }
+  });
+
+  Thread thread2 = new Thread(() -> {
+      for (int i = 0; i < 1000; i++) {
+        System.out.println("thread two running");
+      }
+  });
+
+  thread1.start();
+  thread2.start();
+
+  // thread1 and thread2 output is still intermixed (no order set for them)
+  try {
+    thread1.join();
+    thread2.join();
+  } catch (InterruptedException e) {
+    // error handling
+  }
+
+  // Guaranteed to be printed after all printing by thread1, thread2
+  System.out.println("Finished");
+```
+
+### sleep()
+
+- Pauses thread execution for specified number of milliseconds
+
+### Synchronization
+
+- To avoid data races: concurrent writing to shared resource in heap memory
+- Uses lock object: protects the critical section of memory
+
+```java
+  public class MessageTask implements Runnable {
+
+    private static Object lock = new Object();
+    private static Account account;
+
+    public void run() {
+      synchronized(lock) {
+        // Some code modifying the account
+      }
+    }
+  }
+```
+
+- Potential problems
+  - Different locks for each thread (have static lock object shared by all threads)
+  - Have atomic transactions (execute one write all within same synchronized block)
+  - Avoid deadlock (prevent code depending on two lock objects)
+
+## Software Life Cycle
+
+- Problem specification
+- Program design
+- Program testing
+
+### Problem Specification
+
+- Create clear, accurate, unambiguous statement of problem you're trying to solve
+
+### Program Design
+
+- Break software into integrated set of components that work together to solve problem specification
+
+### Program Testing
+
+- Program verification (formal proofs of correctness)
+- Empirical testing (unit tests, integration tests, alpha/beta tests)
+
+# THE END
