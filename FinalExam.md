@@ -1168,9 +1168,39 @@
 
 ## Software Life Cycle
 
-- Problem specification
-- Program design
-- Program testing
+- PPSCTDM
+  - Problem specification
+  - Program design
+  - Selection of algorithms/data structures
+  - Coding and debugging
+  - Testing and verification
+  - Documentation and support
+  - Maintenance
+
+### Software Development Processes
+
+#### Waterfall
+
+- Perform each step of software development cycle in order
+  - Only start next step after completion of previous step
+  - Emphasizes predictability but unworkable for large projects
+
+#### Iterative
+
+- Iteratively add incremental developments
+  - Takes advantage of what was learned from previous system
+  - Use working prototypes to refine specification
+  - Emphasizes adaptibility
+  - Ex: unified model, agile development (extreme programming XP)
+
+##### Unified
+
+- IECT: inception, elaboration, construction, transition
+- Each stage treated as mini-waterfalls
+
+##### Agile
+
+- Short sprints of 1-4 weeks w/ focus on working software
 
 ### Problem Specification
 
